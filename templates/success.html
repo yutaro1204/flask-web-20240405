@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Successfully purchased!{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <section>
+    <p>{{ product.name }}の購入に成功しました！</p>
+    <a href="/products">商品を見る</a>
+    <a href="/cart">カートを見る</a>
+  </section>
+{% endblock %}

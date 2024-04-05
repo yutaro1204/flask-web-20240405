@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Transactions{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <section>
+    {% for transaction in transactions %}
+      <dt>
+        {{ transaction.product.name }}を購入しました。
+      </dt>
+      <dd>{{ transaction.product.price }}円支払いました。</dd>
+    {% endfor %}
+    <a href="/products">商品を見る</a>
+    <a href="/cart">カートを見る</a>
+  </section>
+{% endblock %}

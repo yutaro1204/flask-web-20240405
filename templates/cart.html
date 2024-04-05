@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Cart{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <section>
+    {% for product in products %}
+      <p>{{ product.name }}</p>
+      <form action="/purchase/{{ product.id }}" method="post">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <input type="submit" value="購入する">
+      </form>
+      <form action="/remove_cart" method="post">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <input type="submit" value="カートから取り除く">
+      </form>
+    {% endfor %}
+    <a href="/products">商品を見る</a>
+    <a href="/transactions">購入履歴を見る</a>
+  </section>
+{% endblock %}
