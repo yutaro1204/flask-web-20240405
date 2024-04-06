@@ -5,6 +5,9 @@ from datetime import datetime, timezone
 from sqlalchemy.orm import Mapped, mapped_column
 from typing import List
 import logging
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField
+from wtforms.validators import InputRequired, Length, Email
 
 app = Flask(__name__)
 
@@ -42,7 +45,8 @@ class Product(db.Model):
 class User(db.Model):
     __tablename__ = 'users'
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(db.String(20), nullable=False)
+    name: Mapped[str] = mapped_column(db.String(20), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(db.String(100), unique=True, nullable=False)
     purchase_transactions: Mapped[List['PurchaseTransaction']] = db.relationship(back_populates='user', cascade='all, delete-orphan')
     created: Mapped[datetime] = mapped_column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     updated: Mapped[datetime] = mapped_column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
@@ -60,6 +64,22 @@ class PurchaseTransaction(db.Model):
     updated: Mapped[datetime] = mapped_column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     def __repr__(self) -> str:
         return f'PurchaseTransaction(id={self.id!r}, product_id={self.product_id!r}, user_id={self.user_id!r} created={self.created!r}, updated={self.updated!r})'
+
+class SignUpForm(FlaskForm):
+    name = StringField('name', validators=[InputRequired(), Length(min=1, max=20)])
+    email = StringField('email', validators=[InputRequired(), Email()])
+
+@app.route("/sign_up", methods=('GET', 'POST'))
+def sign_up():
+    form = SignUpForm(request.form)
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        user = User(name=name, email=email)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('products'))
+    return render_template('sign_up.html', form=form)
 
 @app.route("/products")
 def products():
