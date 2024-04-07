@@ -8,6 +8,7 @@ import logging
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import InputRequired, Length, Email
+from flask_wtf.csrf import CSRFProtect
 import bcrypt
 
 app = Flask(__name__)
@@ -31,6 +32,9 @@ db.init_app(app)
 
 migrate = Migrate()
 migrate.init_app(app, db)
+
+csrf = CSRFProtect()
+csrf.init_app(app)
 
 class Product(db.Model):
     __tablename__ = 'products'
