@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  app:
+  dev_app:
     build: .
     volumes:
       - .:/app
@@ -10,6 +10,17 @@ services:
     environment:
       - FLASK_APP=main
       - FLASK_DEBUG=on
+      - FLASK_ENV=development
+      - TZ=Asia/Tokyo
+  test_app:
+    build: .
+    volumes:
+      - .:/app
+    command: bash -c "flask run --host=0.0.0.0"
+    environment:
+      - FLASK_APP=main
+      - FLASK_DEBUG=on
+      - FLASK_ENV=test
       - TZ=Asia/Tokyo
   postgres:
     image: postgres:16.2-bookworm
@@ -19,6 +30,7 @@ services:
       - POSTGRES_DB=postgres
       - TZ=Asia/Tokyo
     ports:
-     - 5432:5432
+      - 5432:5432
     volumes:
-     - ./db/data:/var/lib/postgresql/data
+      - ./db/data:/var/lib/postgresql/data
+      - ./db/initdb.d:/docker-entrypoint-initdb.d

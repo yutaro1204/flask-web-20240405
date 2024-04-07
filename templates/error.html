@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Error{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <section>
+    <h1>Something went wrong.</h1>
+    <p>{{ e }}</p>
+    <a href="/sign_in">サインインへ戻る</a>
+  </section>
+{% endblock %}
