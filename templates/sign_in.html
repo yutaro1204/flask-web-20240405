@@ -2,7 +2,7 @@
 {% from "_formhelpers.html" import render_field %}
 
 {% block header %}
-  <h1>{% block title %}SignUp{% endblock %}</h1>
+  <h1>{% block title %}SignIn{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -10,11 +10,10 @@
     <form method="post">
       {{ form.csrf_token }}
       <dl>
-        {{ render_field(form.name, placeholder="name") }}
         {{ render_field(form.email, placeholder="email") }}
         {{ render_field(form.password, placeholder="password") }}
       </dl>
-      <input type="submit" value="サインアップ">
+      <input type="submit" value="サインイン">
     </form>
   </section>
 {% endblock %}

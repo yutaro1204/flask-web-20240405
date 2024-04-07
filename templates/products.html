@@ -24,5 +24,9 @@
       {% endfor %}
     {% endif %}
     <a href="/cart">カートを見る</a>
+    <form action="/sign_out" method="post">
+      {{ form.csrf_token }}
+      <input type="submit" value="サインアウト">
+    </form>
   </section>
 {% endblock %}
